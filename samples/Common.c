@@ -1,5 +1,6 @@
 #define LOG_CLASS "WebRtcSamples"
 #include "Samples.h"
+#include <inttypes.h>
 
 PSampleConfiguration gSampleConfiguration = NULL;
 
@@ -473,12 +474,14 @@ STATUS createSampleStreamingSession(PSampleConfiguration pSampleConfiguration, P
                                     PSampleStreamingSession* ppSampleStreamingSession)
 {
     STATUS retStatus = STATUS_SUCCESS;
-    RtcMediaStreamTrack videoTrack, audioTrack;
+    RtcMediaStreamTrack videoTrack, videoTrack2, audioTrack;
     PSampleStreamingSession pSampleStreamingSession = NULL;
     RtcRtpTransceiverInit audioRtpTransceiverInit;
     RtcRtpTransceiverInit videoRtpTransceiverInit;
+    RtcRtpTransceiverInit videoRtpTransceiverInit2;
 
     MEMSET(&videoTrack, 0x00, SIZEOF(RtcMediaStreamTrack));
+    MEMSET(&videoTrack2, 0x00, SIZEOF(RtcMediaStreamTrack));
     MEMSET(&audioTrack, 0x00, SIZEOF(RtcMediaStreamTrack));
 
     CHK(pSampleConfiguration != NULL && ppSampleStreamingSession != NULL, STATUS_NULL_ARG);
@@ -496,8 +499,9 @@ STATUS createSampleStreamingSession(PSampleConfiguration pSampleConfiguration, P
     }
     ATOMIC_STORE_BOOL(&pSampleStreamingSession->peerIdReceived, TRUE);
 
-    pSampleStreamingSession->pAudioRtcRtpTransceiver = NULL;
+    // pSampleStreamingSession->pAudioRtcRtpTransceiver = NULL;
     pSampleStreamingSession->pVideoRtcRtpTransceiver = NULL;
+    pSampleStreamingSession->pVideoRtcRtpTransceiver2 = NULL;
 
     pSampleStreamingSession->pSampleConfiguration = pSampleConfiguration;
     pSampleStreamingSession->rtcMetricsHistory.prevTs = GETTIME();
@@ -528,16 +532,32 @@ STATUS createSampleStreamingSession(PSampleConfiguration pSampleConfiguration, P
     videoTrack.kind = MEDIA_STREAM_TRACK_KIND_VIDEO;
     videoTrack.codec = RTC_CODEC_H264_PROFILE_42E01F_LEVEL_ASYMMETRY_ALLOWED_PACKETIZATION_MODE;
     videoRtpTransceiverInit.direction = RTC_RTP_TRANSCEIVER_DIRECTION_SENDRECV;
-    STRCPY(videoTrack.streamId, "myKvsVideoStream");
-    STRCPY(videoTrack.trackId, "myVideoTrack");
+    STRCPY(videoTrack.streamId, "myKvsVideoStream1");
+    STRCPY(videoTrack.trackId, "myVideoTrack1");
     CHK_STATUS(addTransceiver(pSampleStreamingSession->pPeerConnection, &videoTrack, &videoRtpTransceiverInit,
                               &pSampleStreamingSession->pVideoRtcRtpTransceiver));
 
-    CHK_STATUS(transceiverOnBandwidthEstimation(pSampleStreamingSession->pVideoRtcRtpTransceiver, (UINT64) pSampleStreamingSession,
+    STATUS status1 = transceiverOnBandwidthEstimation(pSampleStreamingSession->pVideoRtcRtpTransceiver, (UINT64) pSampleStreamingSession,
+                                                      sampleBandwidthEstimationHandler);
+    printf("HOY 1.1 - %" PRIu32 "\n", status1);
+    CHK_STATUS(status1);
+
+    // Add a 2nd SendRecv Transceiver of type video
+    videoTrack2.kind = MEDIA_STREAM_TRACK_KIND_VIDEO;
+    videoTrack2.codec = RTC_CODEC_H264_PROFILE_42E01F_LEVEL_ASYMMETRY_ALLOWED_PACKETIZATION_MODE;
+    videoRtpTransceiverInit2.direction = RTC_RTP_TRANSCEIVER_DIRECTION_SENDRECV;
+    STRCPY(videoTrack2.streamId, "myKvsVideoStream2");
+    STRCPY(videoTrack2.trackId, "myVideoTrack2");
+    STATUS status2 = addTransceiver(pSampleStreamingSession->pPeerConnection, &videoTrack2, &videoRtpTransceiverInit2,
+                                    &pSampleStreamingSession->pVideoRtcRtpTransceiver2);
+    printf("HOY 1.2 - %" PRIu32 "\n", status2);
+    CHK_STATUS(status2);
+
+    CHK_STATUS(transceiverOnBandwidthEstimation(pSampleStreamingSession->pVideoRtcRtpTransceiver2, (UINT64) pSampleStreamingSession,
                                                 sampleBandwidthEstimationHandler));
 
     // Add a SendRecv Transceiver of type audio
-    audioTrack.kind = MEDIA_STREAM_TRACK_KIND_AUDIO;
+    /*audioTrack.kind = MEDIA_STREAM_TRACK_KIND_AUDIO;
     audioTrack.codec = RTC_CODEC_OPUS;
     audioRtpTransceiverInit.direction = RTC_RTP_TRANSCEIVER_DIRECTION_SENDRECV;
     STRCPY(audioTrack.streamId, "myKvsVideoStream");
@@ -546,7 +566,7 @@ STATUS createSampleStreamingSession(PSampleConfiguration pSampleConfiguration, P
                               &pSampleStreamingSession->pAudioRtcRtpTransceiver));
 
     CHK_STATUS(transceiverOnBandwidthEstimation(pSampleStreamingSession->pAudioRtcRtpTransceiver, (UINT64) pSampleStreamingSession,
-                                                sampleBandwidthEstimationHandler));
+                                                sampleBandwidthEstimationHandler));*/
     // twcc bandwidth estimation
     CHK_STATUS(peerConnectionOnSenderBandwidthEstimation(pSampleStreamingSession->pPeerConnection, (UINT64) pSampleStreamingSession,
                                                          sampleSenderBandwidthEstimationHandler));
@@ -1385,6 +1405,8 @@ STATUS signalingMessageReceived(UINT64 customData, PReceivedSignalingMessage pRe
         CHK_STATUS(hashTableGet(pSampleConfiguration->pRtcPeerConnectionForRemoteClient, clientIdHash, &hashValue));
         pSampleStreamingSession = (PSampleStreamingSession) hashValue;
     }
+
+    DLOGD("Signaling message received with type %u", pReceivedSignalingMessage->signalingMessage.messageType);
 
     switch (pReceivedSignalingMessage->signalingMessage.messageType) {
         case SIGNALING_MESSAGE_TYPE_OFFER:

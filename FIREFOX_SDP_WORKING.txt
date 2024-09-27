@@ -1,0 +1,144 @@
+{
+"type": "offer",
+"sdp": "v=0\r
+o=mozilla...THIS_IS_SDPARTA-99.0 3127956342997599812 0 IN IP4 0.0.0.0\r
+s=-\r
+t=0 0\r
+a=sendrecv\r
+a=fingerprint:sha-256 D6:40:D3:1E:6A:99:2C:41:27:B5:07:18:3A:9D:F3:81:AB:31:2C:56:09:E7:E8:7A:BE:44:CF:32:E4:20:AF:C6\r
+a=group:BUNDLE 0 1\r
+a=ice-options:trickle\r
+a=msid-semantic:WMS *\r
+m=video 9 UDP/TLS/RTP/SAVPF 120 124 121 125 126 127 97 98 123 122 119\r
+c=IN IP4 0.0.0.0\r
+a=recvonly\r
+a=extmap:3 urn:ietf:params:rtp-hdrext:sdes:mid\r
+a=extmap:4 http://www.webrtc.org/experiments/rtp-hdrext/abs-send-time\r
+a=extmap:5 urn:ietf:params:rtp-hdrext:toffset\r
+a=extmap:6/recvonly http://www.webrtc.org/experiments/rtp-hdrext/playout-delay\r
+a=extmap:7 http://www.ietf.org/id/draft-holmer-rmcat-transport-wide-cc-extensions-01\r
+a=fmtp:126 profile-level-id=42e01f;level-asymmetry-allowed=1;packetization-mode=1\r
+a=fmtp:97 profile-level-id=42e01f;level-asymmetry-allowed=1\r
+a=fmtp:120 max-fs=12288;max-fr=60\r
+a=fmtp:124 apt=120\r
+a=fmtp:121 max-fs=12288;max-fr=60\r
+a=fmtp:125 apt=121\r
+a=fmtp:127 apt=126\r
+a=fmtp:98 apt=97\r
+a=fmtp:119 apt=122\r
+a=ice-pwd:6714647bcba55fe181f0231edcecc2ff\r
+a=ice-ufrag:7c5dbd36\r
+a=mid:0\r
+a=rtcp-fb:120 nack\r
+a=rtcp-fb:120 nack pli\r
+a=rtcp-fb:120 ccm fir\r
+a=rtcp-fb:120 goog-remb\r
+a=rtcp-fb:120 transport-cc\r
+a=rtcp-fb:121 nack\r
+a=rtcp-fb:121 nack pli\r
+a=rtcp-fb:121 ccm fir\r
+a=rtcp-fb:121 goog-remb\r
+a=rtcp-fb:121 transport-cc\r
+a=rtcp-fb:126 nack\r
+a=rtcp-fb:126 nack pli\r
+a=rtcp-fb:126 ccm fir\r
+a=rtcp-fb:126 goog-remb\r
+a=rtcp-fb:126 transport-cc\r
+a=rtcp-fb:97 nack\r
+a=rtcp-fb:97 nack pli\r
+a=rtcp-fb:97 ccm fir\r
+a=rtcp-fb:97 goog-remb\r
+a=rtcp-fb:97 transport-cc\r
+a=rtcp-fb:123 nack\r
+a=rtcp-fb:123 nack pli\r
+a=rtcp-fb:123 ccm fir\r
+a=rtcp-fb:123 goog-remb\r
+a=rtcp-fb:123 transport-cc\r
+a=rtcp-fb:122 nack\r
+a=rtcp-fb:122 nack pli\r
+a=rtcp-fb:122 ccm fir\r
+a=rtcp-fb:122 goog-remb\r
+a=rtcp-fb:122 transport-cc\r
+a=rtcp-mux\r
+a=rtcp-rsize\r
+a=rtpmap:120 VP8/90000\r
+a=rtpmap:124 rtx/90000\r
+a=rtpmap:121 VP9/90000\r
+a=rtpmap:125 rtx/90000\r
+a=rtpmap:126 H264/90000\r
+a=rtpmap:127 rtx/90000\r
+a=rtpmap:97 H264/90000\r
+a=rtpmap:98 rtx/90000\r
+a=rtpmap:123 ulpfec/90000\r
+a=rtpmap:122 red/90000\r
+a=rtpmap:119 rtx/90000\r
+a=setup:actpass\r
+a=ssrc:3154336958 cname:{b21fb751-69ab-43aa-83fc-c61a7695f4bd}\r
+m=video 0 UDP/TLS/RTP/SAVPF 120 124 121 125 126 127 97 98 123 122 119\r
+c=IN IP4 0.0.0.0\r
+a=bundle-only\r
+a=recvonly\r
+a=extmap:3 urn:ietf:params:rtp-hdrext:sdes:mid\r
+a=extmap:4 http://www.webrtc.org/experiments/rtp-hdrext/abs-send-time\r
+a=extmap:5 urn:ietf:params:rtp-hdrext:toffset\r
+a=extmap:6/recvonly http://www.webrtc.org/experiments/rtp-hdrext/playout-delay\r
+a=extmap:7 http://www.ietf.org/id/draft-holmer-rmcat-transport-wide-cc-extensions-01\r
+a=fmtp:126 profile-level-id=42e01f;level-asymmetry-allowed=1;packetization-mode=1\r
+a=fmtp:97 profile-level-id=42e01f;level-asymmetry-allowed=1\r
+a=fmtp:120 max-fs=12288;max-fr=60\r
+a=fmtp:124 apt=120\r
+a=fmtp:121 max-fs=12288;max-fr=60\r
+a=fmtp:125 apt=121\r
+a=fmtp:127 apt=126\r
+a=fmtp:98 apt=97\r
+a=fmtp:119 apt=122\r
+a=ice-pwd:6714647bcba55fe181f0231edcecc2ff\r
+a=ice-ufrag:7c5dbd36\r
+a=mid:1\r
+a=rtcp-fb:120 nack\r
+a=rtcp-fb:120 nack pli\r
+a=rtcp-fb:120 ccm fir\r
+a=rtcp-fb:120 goog-remb\r
+a=rtcp-fb:120 transport-cc\r
+a=rtcp-fb:121 nack\r
+a=rtcp-fb:121 nack pli\r
+a=rtcp-fb:121 ccm fir\r
+a=rtcp-fb:121 goog-remb\r
+a=rtcp-fb:121 transport-cc\r
+a=rtcp-fb:126 nack\r
+a=rtcp-fb:126 nack pli\r
+a=rtcp-fb:126 ccm fir\r
+a=rtcp-fb:126 goog-remb\r
+a=rtcp-fb:126 transport-cc\r
+a=rtcp-fb:97 nack\r
+a=rtcp-fb:97 nack pli\r
+a=rtcp-fb:97 ccm fir\r
+a=rtcp-fb:97 goog-remb\r
+a=rtcp-fb:97 transport-cc\r
+a=rtcp-fb:123 nack\r
+a=rtcp-fb:123 nack pli\r
+a=rtcp-fb:123 ccm fir\r
+a=rtcp-fb:123 goog-remb\r
+a=rtcp-fb:123 transport-cc\r
+a=rtcp-fb:122 nack\r
+a=rtcp-fb:122 nack pli\r
+a=rtcp-fb:122 ccm fir\r
+a=rtcp-fb:122 goog-remb\r
+a=rtcp-fb:122 transport-cc\r
+a=rtcp-mux\r
+a=rtcp-rsize\r
+a=rtpmap:120 VP8/90000\r
+a=rtpmap:124 rtx/90000\r
+a=rtpmap:121 VP9/90000\r
+a=rtpmap:125 rtx/90000\r
+a=rtpmap:126 H264/90000\r
+a=rtpmap:127 rtx/90000\r
+a=rtpmap:97 H264/90000\r
+a=rtpmap:98 rtx/90000\r
+a=rtpmap:123 ulpfec/90000\r
+a=rtpmap:122 red/90000\r
+a=rtpmap:119 rtx/90000\r
+a=setup:actpass\r
+a=ssrc:1539233476 cname:{b21fb751-69ab-43aa-83fc-c61a7695f4bd}\r
+"
+}

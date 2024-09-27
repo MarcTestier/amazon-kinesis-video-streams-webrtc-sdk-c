@@ -85,7 +85,7 @@ INT32 main(INT32 argc, CHAR* argv[])
     CHK_STATUS(setLocalDescription(pSampleStreamingSession->pPeerConnection, &offerSessionDescriptionInit));
     DLOGI("[KVS Viewer] Completed setting local description");
 
-    CHK_STATUS(transceiverOnFrame(pSampleStreamingSession->pAudioRtcRtpTransceiver, (UINT64) pSampleStreamingSession, sampleAudioFrameHandler));
+    // CHK_STATUS(transceiverOnFrame(pSampleStreamingSession->pAudioRtcRtpTransceiver, (UINT64) pSampleStreamingSession, sampleAudioFrameHandler));
 
     if (!pSampleConfiguration->trickleIce) {
         DLOGI("[KVS Viewer] Non trickle ice. Wait for Candidate collection to complete");

@@ -64,11 +64,11 @@ GstFlowReturn on_new_sample(GstElement* sink, gpointer data, UINT64 trackid)
             frame.index = (UINT32) ATOMIC_INCREMENT(&pSampleStreamingSession->frameIndex);
 
             if (trackid == DEFAULT_AUDIO_TRACK_ID) {
-                pRtcRtpTransceiver = pSampleStreamingSession->pAudioRtcRtpTransceiver;
+                /*pRtcRtpTransceiver = pSampleStreamingSession->pAudioRtcRtpTransceiver;
                 frame.presentationTs = pSampleStreamingSession->audioTimestamp;
                 frame.decodingTs = frame.presentationTs;
                 pSampleStreamingSession->audioTimestamp +=
-                    SAMPLE_AUDIO_FRAME_DURATION; // assume audio frame size is 20ms, which is default in opusenc
+                    SAMPLE_AUDIO_FRAME_DURATION; // assume audio frame size is 20ms, which is default in opusenc*/
             } else {
                 pRtcRtpTransceiver = pSampleStreamingSession->pVideoRtcRtpTransceiver;
                 frame.presentationTs = pSampleStreamingSession->videoTimestamp;
@@ -327,7 +327,7 @@ PVOID receiveGstreamerAudioVideo(PVOID args)
     CHK_ERR(pSampleStreamingSession != NULL, STATUS_NULL_ARG, "[KVS Gstreamer Master] Sample streaming session is NULL");
 
     // TODO: For video
-    switch (pSampleStreamingSession->pAudioRtcRtpTransceiver->receiver.track.codec) {
+    /*switch (pSampleStreamingSession->pAudioRtcRtpTransceiver->receiver.track.codec) {
         case RTC_CODEC_OPUS:
             audioDescription = "appsrc name=appsrc-audio ! opusparse ! decodebin ! autoaudiosink";
             break;
@@ -338,7 +338,7 @@ PVOID receiveGstreamerAudioVideo(PVOID args)
             break;
         default:
             break;
-    }
+    }*/
 
     audioVideoDescription = g_strjoin(" ", audioDescription, videoDescription, NULL);
 

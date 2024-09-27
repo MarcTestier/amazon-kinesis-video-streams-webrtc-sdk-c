@@ -27,7 +27,7 @@ INT32 main(INT32 argc, CHAR* argv[])
     CHK_STATUS(createSampleConfiguration(pChannelName, SIGNALING_CHANNEL_ROLE_TYPE_MASTER, TRUE, TRUE, logLevel, &pSampleConfiguration));
 
     // Set the audio and video handlers
-    pSampleConfiguration->audioSource = sendAudioPackets;
+    // pSampleConfiguration->audioSource = sendAudioPackets;
     pSampleConfiguration->videoSource = sendVideoPackets;
     pSampleConfiguration->receiveAudioVideoSource = sampleReceiveAudioVideoFrame;
 
@@ -129,7 +129,7 @@ PVOID sendVideoPackets(PVOID args)
     Frame frame;
     UINT32 fileIndex = 0, frameSize;
     CHAR filePath[MAX_PATH_LEN + 1];
-    STATUS status;
+    STATUS status1, status2;
     UINT32 i;
     UINT64 startTime, lastFrameTime, elapsed;
     MEMSET(&encoderStats, 0x00, SIZEOF(RtcEncoderStats));
@@ -164,16 +164,23 @@ PVOID sendVideoPackets(PVOID args)
         frame.presentationTs += SAMPLE_VIDEO_FRAME_DURATION;
         MUTEX_LOCK(pSampleConfiguration->streamingSessionListReadLock);
         for (i = 0; i < pSampleConfiguration->streamingSessionCount; ++i) {
-            status = writeFrame(pSampleConfiguration->sampleStreamingSessionList[i]->pVideoRtcRtpTransceiver, &frame);
-            if (pSampleConfiguration->sampleStreamingSessionList[i]->firstFrame && status == STATUS_SUCCESS) {
+            status1 = writeFrame(pSampleConfiguration->sampleStreamingSessionList[i]->pVideoRtcRtpTransceiver, &frame);
+            status2 = writeFrame(pSampleConfiguration->sampleStreamingSessionList[i]->pVideoRtcRtpTransceiver2, &frame);
+            if (pSampleConfiguration->sampleStreamingSessionList[i]->firstFrame && status1 == STATUS_SUCCESS && status2 == STATUS_SUCCESS) {
                 PROFILE_WITH_START_TIME(pSampleConfiguration->sampleStreamingSessionList[i]->offerReceiveTime, "Time to first frame");
                 pSampleConfiguration->sampleStreamingSessionList[i]->firstFrame = FALSE;
             }
             encoderStats.encodeTimeMsec = 4; // update encode time to an arbitrary number to demonstrate stats update
             updateEncoderStats(pSampleConfiguration->sampleStreamingSessionList[i]->pVideoRtcRtpTransceiver, &encoderStats);
-            if (status != STATUS_SRTP_NOT_READY_YET) {
-                if (status != STATUS_SUCCESS) {
-                    DLOGV("writeFrame() failed with 0x%08x", status);
+            updateEncoderStats(pSampleConfiguration->sampleStreamingSessionList[i]->pVideoRtcRtpTransceiver2, &encoderStats);
+            if (status1 != STATUS_SRTP_NOT_READY_YET) {
+                if (status1 != STATUS_SUCCESS) {
+                    DLOGV("status 1 - writeFrame() failed with 0x%08x", status1);
+                }
+            }
+            if (status2 != STATUS_SRTP_NOT_READY_YET) {
+                if (status2 != STATUS_SUCCESS) {
+                    DLOGV("status 1 - writeFrame() failed with 0x%08x", status2);
                 }
             }
         }
@@ -195,6 +202,7 @@ CleanUp:
     return (PVOID) (ULONG_PTR) retStatus;
 }
 
+/*
 PVOID sendAudioPackets(PVOID args)
 {
     STATUS retStatus = STATUS_SUCCESS;
@@ -248,6 +256,7 @@ CleanUp:
     DLOGI("[KVS Master] closing audio thread");
     return (PVOID) (ULONG_PTR) retStatus;
 }
+*/
 
 PVOID sampleReceiveAudioVideoFrame(PVOID args)
 {
@@ -255,7 +264,8 @@ PVOID sampleReceiveAudioVideoFrame(PVOID args)
     PSampleStreamingSession pSampleStreamingSession = (PSampleStreamingSession) args;
     CHK_ERR(pSampleStreamingSession != NULL, STATUS_NULL_ARG, "[KVS Master] Streaming session is NULL");
     CHK_STATUS(transceiverOnFrame(pSampleStreamingSession->pVideoRtcRtpTransceiver, (UINT64) pSampleStreamingSession, sampleVideoFrameHandler));
-    CHK_STATUS(transceiverOnFrame(pSampleStreamingSession->pAudioRtcRtpTransceiver, (UINT64) pSampleStreamingSession, sampleAudioFrameHandler));
+    CHK_STATUS(transceiverOnFrame(pSampleStreamingSession->pVideoRtcRtpTransceiver2, (UINT64) pSampleStreamingSession, sampleVideoFrameHandler));
+    // CHK_STATUS(transceiverOnFrame(pSampleStreamingSession->pAudioRtcRtpTransceiver, (UINT64) pSampleStreamingSession, sampleAudioFrameHandler));
 
 CleanUp:
 

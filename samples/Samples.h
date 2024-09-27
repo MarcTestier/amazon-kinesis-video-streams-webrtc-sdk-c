@@ -156,7 +156,8 @@ struct __SampleStreamingSession {
     volatile SIZE_T correlationIdPostFix;
     PRtcPeerConnection pPeerConnection;
     PRtcRtpTransceiver pVideoRtcRtpTransceiver;
-    PRtcRtpTransceiver pAudioRtcRtpTransceiver;
+    PRtcRtpTransceiver pVideoRtcRtpTransceiver2;
+    // PRtcRtpTransceiver pAudioRtcRtpTransceiver;
     RtcSessionDescriptionInit answerSessionDescriptionInit;
     PSampleConfiguration pSampleConfiguration;
     UINT64 audioTimestamp;
